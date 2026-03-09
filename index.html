@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Runner Dashboard</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2129;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --orange: #db6d28;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  /* Header */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .header-left { display: flex; align-items: center; gap: 0.75rem; }
+
+  .header h1 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .service-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 99px;
+    font-weight: 500;
+  }
+  .service-badge.active { background: rgba(63,185,80,0.15); color: var(--green); }
+  .service-badge.inactive { background: rgba(248,81,73,0.15); color: var(--red); }
+
+  .header-meta {
+    font-size: 0.775rem;
+    color: var(--muted);
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+  }
+
+  /* Stats row */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat {
+    background: var(--bg);
+    padding: 1rem 1.25rem;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .stat-value.running { color: var(--accent); }
+  .stat-value.pending { color: var(--yellow); }
+  .stat-value.completed { color: var(--green); }
+  .stat-value.failed { color: var(--red); }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.15rem;
+  }
+
+  /* Main layout */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* Section */
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .section-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-header .count {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 0 0.45rem;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* Table */
+  .table { width: 100%; border-collapse: collapse; }
+  .table th {
+    text-align: left;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .table td {
+    padding: 0.55rem 1rem;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .table tr:last-child td { border-bottom: none; }
+
+  .table .mono {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.8rem;
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 99px;
+    font-weight: 500;
+  }
+  .badge-running    { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .badge-completed  { background: rgba(63,185,80,0.15); color: var(--green); }
+  .badge-failed     { background: rgba(248,81,73,0.15); color: var(--red); }
+  .badge-pending    { background: rgba(210,153,34,0.15); color: var(--yellow); }
+  .badge-clarifying { background: rgba(188,140,255,0.15); color: var(--purple); }
+
+  .badge-issue    { background: rgba(63,185,80,0.12); color: var(--green); }
+  .badge-pr_fix   { background: rgba(88,166,255,0.12); color: var(--accent); }
+  .badge-workflow  { background: rgba(188,140,255,0.12); color: var(--purple); }
+
+  .error-msg {
+    color: var(--red);
+    font-size: 0.8rem;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .empty {
+    padding: 1.5rem 1rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .time {
+    color: var(--muted);
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .duration { color: var(--orange); font-weight: 500; }
+
+  /* Events */
+  .event-row { display: flex; gap: 0.75rem; align-items: baseline; }
+  .event-row .event-type {
+    font-size: 0.7rem;
+    color: var(--muted);
+    min-width: 55px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .event-row .event-name {
+    font-weight: 500;
+    font-size: 0.85rem;
+  }
+  .event-row .event-msg {
+    color: var(--muted);
+    font-size: 0.825rem;
+  }
+
+  /* Loading */
+  .loading {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--muted);
+  }
+
+  @media (max-width: 700px) {
+    .main { padding: 1rem; gap: 1rem; }
+    .header { padding: 0.75rem 1rem; }
+    .table td, .table th { padding: 0.4rem 0.6rem; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+  <div id="app">
+    <div class="loading">Loading dashboard&hellip;</div>
+  </div>
+
+<script>
+(async () => {
+  const app = document.getElementById('app');
+  let data;
+
+  try {
+    const r = await fetch('data/state.json?t=' + Date.now());
+    if (!r.ok) throw new Error(r.statusText);
+    data = await r.json();
+  } catch (e) {
+    app.innerHTML = `<div class="loading">Failed to load: ${esc(e.message)}</div>`;
+    return;
+  }
+
+  const svc = data.service || {};
+  const stats = data.stats || {};
+  const timerActive = svc.timer === 'active';
+
+  app.innerHTML = `
+    ${renderHeader(svc, data.updated)}
+    ${renderStats(stats)}
+    <div class="main">
+      ${renderRunning(data.running || [])}
+      ${renderPending(data.pending || [])}
+      ${renderRecent(data.recent || [])}
+      ${renderEvents(data.events || [])}
+    </div>
+  `;
+
+  function renderHeader(svc, updated) {
+    const timerCls = svc.timer === 'active' ? 'active' : 'inactive';
+    const updatedStr = updated ? timeAgo(updated) : 'unknown';
+    const nextRun = svc.next_run && svc.next_run !== 'n/a'
+      ? `Next: ${formatTime(svc.next_run)}` : '';
+    return `<div class="header">
+      <div class="header-left">
+        <h1>Runner Dashboard</h1>
+        <span class="service-badge ${timerCls}">${svc.timer || 'unknown'}</span>
+      </div>
+      <div class="header-meta">
+        ${nextRun ? `<span>${nextRun}</span>` : ''}
+        <span>Updated ${updatedStr}</span>
+      </div>
+    </div>`;
+  }
+
+  function renderStats(s) {
+    return `<div class="stats">
+      <div class="stat"><div class="stat-value running">${s.running || 0}</div><div class="stat-label">Running</div></div>
+      <div class="stat"><div class="stat-value pending">${s.pending || 0}</div><div class="stat-label">Pending</div></div>
+      <div class="stat"><div class="stat-value completed">${s.completed || 0}</div><div class="stat-label">Completed</div></div>
+      <div class="stat"><div class="stat-value failed">${s.failed || 0}</div><div class="stat-label">Failed</div></div>
+    </div>`;
+  }
+
+  function renderRunning(rows) {
+    return `<div class="section">
+      <div class="section-header">Running Sessions <span class="count">${rows.length}</span></div>
+      ${rows.length === 0
+        ? '<div class="empty">No active sessions</div>'
+        : `<table class="table"><thead><tr>
+            <th>Type</th><th>Repo</th><th>Ref</th><th>Session</th><th>Started</th><th>Duration</th>
+          </tr></thead><tbody>${rows.map(r => `<tr>
+            <td>${typeBadge(r.type)}</td>
+            <td>${esc(r.repo)}</td>
+            <td class="mono">${esc(r.ref)}</td>
+            <td class="mono">${esc(r.tmux_session || '')}</td>
+            <td class="time">${formatTime(r.started_at)}</td>
+            <td class="duration">${esc(r.duration || '')}</td>
+          </tr>`).join('')}</tbody></table>`
+      }
+    </div>`;
+  }
+
+  function renderPending(rows) {
+    return `<div class="section">
+      <div class="section-header">Pending / Clarifying <span class="count">${rows.length}</span></div>
+      ${rows.length === 0
+        ? '<div class="empty">No pending items</div>'
+        : `<table class="table"><thead><tr>
+            <th>Type</th><th>Repo</th><th>Ref</th><th>Status</th><th>Created</th>
+          </tr></thead><tbody>${rows.map(r => `<tr>
+            <td>${typeBadge(r.type)}</td>
+            <td>${esc(r.repo)}</td>
+            <td class="mono">${esc(r.ref)}</td>
+            <td>${statusBadge(r.status)}</td>
+            <td class="time">${formatTime(r.created_at)}</td>
+          </tr>`).join('')}</tbody></table>`
+      }
+    </div>`;
+  }
+
+  function renderRecent(rows) {
+    return `<div class="section">
+      <div class="section-header">Recent Completed / Failed <span class="count">${rows.length}</span></div>
+      ${rows.length === 0
+        ? '<div class="empty">No recent runs</div>'
+        : `<table class="table"><thead><tr>
+            <th>Type</th><th>Repo</th><th>Ref</th><th>Status</th><th>Completed</th><th>Error</th>
+          </tr></thead><tbody>${rows.map(r => `<tr>
+            <td>${typeBadge(r.type)}</td>
+            <td>${esc(r.repo)}</td>
+            <td class="mono">${esc(r.ref)}</td>
+            <td>${statusBadge(r.status)}</td>
+            <td class="time">${formatTime(r.completed_at)}</td>
+            <td>${r.error_message ? `<span class="error-msg" title="${esc(r.error_message)}">${esc(r.error_message)}</span>` : ''}</td>
+          </tr>`).join('')}</tbody></table>`
+      }
+    </div>`;
+  }
+
+  function renderEvents(rows) {
+    return `<div class="section">
+      <div class="section-header">Recent Events <span class="count">${rows.length}</span></div>
+      ${rows.length === 0
+        ? '<div class="empty">No events</div>'
+        : `<table class="table"><thead><tr>
+            <th>Source</th><th>Event</th><th>Message</th><th>Time</th>
+          </tr></thead><tbody>${rows.map(r => `<tr>
+            <td>${typeBadge(r.run_type)}</td>
+            <td class="mono">${esc(r.event)}</td>
+            <td>${esc(r.message || '')}</td>
+            <td class="time">${formatTime(r.created_at)}</td>
+          </tr>`).join('')}</tbody></table>`
+      }
+    </div>`;
+  }
+
+  function typeBadge(t) {
+    return `<span class="badge badge-${esc(t)}">${esc(t)}</span>`;
+  }
+
+  function statusBadge(s) {
+    return `<span class="badge badge-${esc(s)}">${esc(s)}</span>`;
+  }
+
+  function formatTime(t) {
+    if (!t) return '';
+    const d = new Date(t.includes('T') ? t : t.replace(' ', 'T') + 'Z');
+    if (isNaN(d)) return esc(t);
+    return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+  }
+
+  function timeAgo(t) {
+    const d = new Date(t);
+    const s = Math.floor((Date.now() - d) / 1000);
+    if (s < 60) return 'just now';
+    if (s < 3600) return Math.floor(s / 60) + 'm ago';
+    if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+    return Math.floor(s / 86400) + 'd ago';
+  }
+
+  function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = String(s ?? '');
+    return d.innerHTML;
+  }
+})();
+</script>
+</body>
+</html>
