@@ -1,31 +1,115 @@
 {
-  "updated": "2026-03-09T14:22:53Z",
+  "updated": "2026-03-10T10:32:23Z",
   "service": {
     "timer": "active",
     "next_run": ""
   },
   "stats": {
-    "running": 0,
-    "pending": 1,
-    "completed": 2,
+    "running": 1,
+    "pending": 0,
+    "completed": 10,
     "failed": 1,
-    "tmux_sessions": 0
+    "tmux_sessions": 1
   },
-  "running": [],
-  "pending": [
+  "running": [
+    {
+      "type": "issue",
+      "repo": "tasku_backend",
+      "ref": "#18",
+      "url": "https://github.com/Dambre/tasku_backend/issues/18",
+      "phase": "design",
+      "started_at": "2026-03-10T10:28:25.369887",
+      "duration": "0h 3m"
+    }
+  ],
+  "pending": [],
+  "recent": [
+    {
+      "type": "pr_fix",
+      "repo": "tasku_backend",
+      "ref": "PR#15",
+      "url": "https://github.com/Dambre/tasku_backend/pull/15",
+      "pr_url": null,
+      "status": "completed",
+      "completed_at": "2026-03-10T10:18:15.770277",
+      "error_message": null
+    },
+    {
+      "type": "workflow",
+      "repo": "workflow",
+      "ref": "#7",
+      "url": "https://github.com/Dambre/claude-tasku-workflow/issues/7",
+      "pr_url": "https://github.com/Dambre/claude-tasku-workflow/pull/8",
+      "status": "completed",
+      "completed_at": "2026-03-10T09:47:50.143270",
+      "error_message": null
+    },
+    {
+      "type": "pr_fix",
+      "repo": "tasku_backend",
+      "ref": "PR#15",
+      "url": "https://github.com/Dambre/tasku_backend/pull/15",
+      "pr_url": null,
+      "status": "completed",
+      "completed_at": "2026-03-10T09:45:48.413112",
+      "error_message": null
+    },
+    {
+      "type": "issue",
+      "repo": "tasku-frontend",
+      "ref": "#1",
+      "url": "https://github.com/Dambre/tasku-frontend/issues/1",
+      "pr_url": "https://github.com/Dambre/tasku-frontend/pull/2",
+      "status": "completed",
+      "completed_at": "2026-03-10T08:29:47.745762",
+      "error_message": null
+    },
     {
       "type": "issue",
       "repo": "tasku_backend",
       "ref": "#4",
-      "status": "clarifying",
-      "created_at": "2026-03-09T14:14:34"
-    }
-  ],
-  "recent": [
+      "url": "https://github.com/Dambre/tasku_backend/issues/4",
+      "pr_url": "https://github.com/Dambre/tasku_backend/pull/13",
+      "status": "completed",
+      "completed_at": "2026-03-10T08:16:36.684109",
+      "error_message": null
+    },
+    {
+      "type": "issue",
+      "repo": "tasku_backend",
+      "ref": "#8",
+      "url": "https://github.com/Dambre/tasku_backend/issues/8",
+      "pr_url": "https://github.com/Dambre/tasku_backend/pull/12",
+      "status": "completed",
+      "completed_at": "2026-03-09T17:59:58.844501",
+      "error_message": null
+    },
+    {
+      "type": "issue",
+      "repo": "tasku_backend",
+      "ref": "#7",
+      "url": "https://github.com/Dambre/tasku_backend/issues/7",
+      "pr_url": "https://github.com/Dambre/tasku_backend/pull/11",
+      "status": "completed",
+      "completed_at": "2026-03-09T17:34:20.300761",
+      "error_message": null
+    },
+    {
+      "type": "issue",
+      "repo": "tasku_backend",
+      "ref": "#9",
+      "url": "https://github.com/Dambre/tasku_backend/issues/9",
+      "pr_url": "https://github.com/Dambre/tasku_backend/pull/10",
+      "status": "completed",
+      "completed_at": "2026-03-09T17:33:20.092401",
+      "error_message": null
+    },
     {
       "type": "workflow",
       "repo": "workflow",
       "ref": "#3",
+      "url": "https://github.com/Dambre/claude-tasku-workflow/issues/3",
+      "pr_url": "https://github.com/Dambre/claude-tasku-workflow/pull/5",
       "status": "completed",
       "completed_at": "2026-03-09T13:48:46",
       "error_message": null
@@ -34,79 +118,73 @@
       "type": "workflow",
       "repo": "workflow",
       "ref": "#1",
+      "url": "https://github.com/Dambre/claude-tasku-workflow/issues/1",
+      "pr_url": null,
       "status": "failed",
       "completed_at": "2026-03-09T12:52:07.442871",
       "error_message": "session ended without PR"
-    },
-    {
-      "type": "issue",
-      "repo": "tasku_backend",
-      "ref": "#1",
-      "status": "completed",
-      "completed_at": "2026-03-09T12:27:45.510480",
-      "error_message": null
     }
   ],
   "events": [
     {
       "run_type": "system",
-      "event": "cycle_end",
-      "message": "",
-      "created_at": "2026-03-09T14:22:36"
-    },
-    {
-      "run_type": "system",
       "event": "sync_ok",
       "message": "tasku-frontend",
-      "created_at": "2026-03-09T14:22:32"
+      "created_at": "2026-03-10T10:32:20"
     },
     {
       "run_type": "system",
       "event": "sync_ok",
       "message": "tasku_backend",
-      "created_at": "2026-03-09T14:22:30"
+      "created_at": "2026-03-10T10:32:18"
     },
     {
       "run_type": "system",
       "event": "sync_ok",
       "message": "tasku workflow repo",
-      "created_at": "2026-03-09T14:22:28"
+      "created_at": "2026-03-10T10:32:16"
     },
     {
       "run_type": "system",
       "event": "cycle_start",
       "message": "",
-      "created_at": "2026-03-09T14:22:26"
+      "created_at": "2026-03-10T10:32:15"
     },
     {
       "run_type": "system",
       "event": "cycle_end",
       "message": "",
-      "created_at": "2026-03-09T14:21:35"
+      "created_at": "2026-03-10T10:31:24"
     },
     {
       "run_type": "system",
       "event": "sync_ok",
       "message": "tasku-frontend",
-      "created_at": "2026-03-09T14:21:32"
+      "created_at": "2026-03-10T10:31:20"
     },
     {
       "run_type": "system",
       "event": "sync_ok",
       "message": "tasku_backend",
-      "created_at": "2026-03-09T14:21:29"
+      "created_at": "2026-03-10T10:31:18"
     },
     {
       "run_type": "system",
       "event": "sync_ok",
       "message": "tasku workflow repo",
-      "created_at": "2026-03-09T14:21:27"
+      "created_at": "2026-03-10T10:31:15"
     },
     {
       "run_type": "system",
       "event": "cycle_start",
       "message": "",
-      "created_at": "2026-03-09T14:21:26"
+      "created_at": "2026-03-10T10:31:14"
+    },
+    {
+      "run_type": "system",
+      "event": "cycle_end",
+      "message": "",
+      "created_at": "2026-03-10T10:30:24"
     }
   ]
 }
