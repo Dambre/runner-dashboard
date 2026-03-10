@@ -49,14 +49,15 @@
     letter-spacing: -0.01em;
   }
 
-  .service-badge {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.6rem;
-    border-radius: 99px;
-    font-weight: 500;
+  .status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
   }
-  .service-badge.active { background: rgba(63,185,80,0.15); color: var(--green); }
-  .service-badge.inactive { background: rgba(248,81,73,0.15); color: var(--red); }
+  .status-dot.online { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .status-dot.offline { background: var(--red); box-shadow: 0 0 6px var(--red); }
 
   .header-meta {
     font-size: 0.775rem;
@@ -208,6 +209,35 @@
 
   .duration { color: var(--orange); font-weight: 500; }
 
+  .refresh-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 0.3rem 0.65rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .refresh-btn.spinning svg { animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .phase-badge {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 99px;
+    background: rgba(88,166,255,0.12);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .ref-link, .pr-link {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .ref-link:hover, .pr-link:hover { text-decoration: underline; }
+
   /* Events */
   .event-row { display: flex; gap: 0.75rem; align-items: baseline; }
   .event-row .event-type {
@@ -247,12 +277,25 @@
   </div>
 
 <script>
-(async () => {
+const REFRESH_INTERVAL = 60_000; // 1 minute
+let lastUpdated = null;
+
+function tickUpdatedTime() {
+  const el = document.getElementById('updated-ago');
+  if (el && lastUpdated) el.textContent = 'Updated ' + timeAgo(lastUpdated);
+  const dot = document.querySelector('.status-dot');
+  if (dot && lastUpdated) {
+    const stale = (Date.now() - new Date(lastUpdated)) > 5 * 60 * 1000;
+    dot.className = 'status-dot ' + (stale ? 'offline' : 'online');
+  }
+}
+
+async function loadAndRender() {
   const app = document.getElementById('app');
   let data;
 
   try {
-    const r = await fetch('data/state.json?t=' + Date.now());
+    const r = await fetch('data/state.json?t=' + Date.now(), { cache: 'no-store' });
     if (!r.ok) throw new Error(r.statusText);
     data = await r.json();
   } catch (e) {
@@ -262,32 +305,38 @@
 
   const svc = data.service || {};
   const stats = data.stats || {};
-  const timerActive = svc.timer === 'active';
+  lastUpdated = data.updated;
 
   app.innerHTML = `
     ${renderHeader(svc, data.updated)}
     ${renderStats(stats)}
     <div class="main">
-      ${renderRunning(data.running || [])}
-      ${renderPending(data.pending || [])}
+      ${(data.running || []).length ? renderRunning(data.running) : ''}
+      ${(data.pending || []).length ? renderPending(data.pending) : ''}
       ${renderRecent(data.recent || [])}
       ${renderEvents(data.events || [])}
     </div>
   `;
 
   function renderHeader(svc, updated) {
-    const timerCls = svc.timer === 'active' ? 'active' : 'inactive';
     const updatedStr = updated ? timeAgo(updated) : 'unknown';
+    const stale = updated ? (Date.now() - new Date(updated)) > 5 * 60 * 1000 : true;
+    const dotCls = stale ? 'offline' : 'online';
     const nextRun = svc.next_run && svc.next_run !== 'n/a'
       ? `Next: ${formatTime(svc.next_run)}` : '';
     return `<div class="header">
       <div class="header-left">
         <h1>Runner Dashboard</h1>
-        <span class="service-badge ${timerCls}">${svc.timer || 'unknown'}</span>
+        <span class="status-dot ${dotCls}" title="${stale ? 'Last update >5min ago' : 'Online'}"></span>
       </div>
       <div class="header-meta">
         ${nextRun ? `<span>${nextRun}</span>` : ''}
-        <span>Updated ${updatedStr}</span>
+        <span id="updated-ago">Updated ${updatedStr}</span>
+        <button class="refresh-btn" onclick="refresh()" title="Refresh now">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 1v5h5"/><path d="M1 6a7 7 0 0 1 12.9-2.5M15 15v-5h-5"/><path d="M15 10a7 7 0 0 1-12.9 2.5"/>
+          </svg>
+        </button>
       </div>
     </div>`;
   }
@@ -307,12 +356,12 @@
       ${rows.length === 0
         ? '<div class="empty">No active sessions</div>'
         : `<table class="table"><thead><tr>
-            <th>Type</th><th>Repo</th><th>Ref</th><th>Session</th><th>Started</th><th>Duration</th>
+            <th>Type</th><th>Repo</th><th>Ref</th><th>Phase</th><th>Started</th><th>Duration</th>
           </tr></thead><tbody>${rows.map(r => `<tr>
             <td>${typeBadge(r.type)}</td>
             <td>${esc(r.repo)}</td>
-            <td class="mono">${esc(r.ref)}</td>
-            <td class="mono">${esc(r.tmux_session || '')}</td>
+            <td class="mono">${refLink(r.ref, r.url)}</td>
+            <td><span class="phase-badge">${esc(r.phase || 'starting')}</span></td>
             <td class="time">${formatTime(r.started_at)}</td>
             <td class="duration">${esc(r.duration || '')}</td>
           </tr>`).join('')}</tbody></table>`
@@ -330,7 +379,7 @@
           </tr></thead><tbody>${rows.map(r => `<tr>
             <td>${typeBadge(r.type)}</td>
             <td>${esc(r.repo)}</td>
-            <td class="mono">${esc(r.ref)}</td>
+            <td class="mono">${refLink(r.ref, r.url)}</td>
             <td>${statusBadge(r.status)}</td>
             <td class="time">${formatTime(r.created_at)}</td>
           </tr>`).join('')}</tbody></table>`
@@ -344,13 +393,14 @@
       ${rows.length === 0
         ? '<div class="empty">No recent runs</div>'
         : `<table class="table"><thead><tr>
-            <th>Type</th><th>Repo</th><th>Ref</th><th>Status</th><th>Completed</th><th>Error</th>
+            <th>Type</th><th>Repo</th><th>Ref</th><th>Status</th><th>Completed</th><th>PR</th><th>Error</th>
           </tr></thead><tbody>${rows.map(r => `<tr>
             <td>${typeBadge(r.type)}</td>
             <td>${esc(r.repo)}</td>
-            <td class="mono">${esc(r.ref)}</td>
+            <td class="mono">${refLink(r.ref, r.url)}</td>
             <td>${statusBadge(r.status)}</td>
             <td class="time">${formatTime(r.completed_at)}</td>
+            <td>${r.pr_url ? `<a href="${esc(r.pr_url)}" target="_blank" class="pr-link">#${esc(r.pr_url.split('/').pop())}</a>` : ''}</td>
             <td>${r.error_message ? `<span class="error-msg" title="${esc(r.error_message)}">${esc(r.error_message)}</span>` : ''}</td>
           </tr>`).join('')}</tbody></table>`
       }
@@ -374,6 +424,11 @@
     </div>`;
   }
 
+  function refLink(ref, url) {
+    if (url) return `<a href="${esc(url)}" target="_blank" class="ref-link">${esc(ref)}</a>`;
+    return esc(ref);
+  }
+
   function typeBadge(t) {
     return `<span class="badge badge-${esc(t)}">${esc(t)}</span>`;
   }
@@ -384,9 +439,10 @@
 
   function formatTime(t) {
     if (!t) return '';
-    const d = new Date(t.includes('T') ? t : t.replace(' ', 'T') + 'Z');
+    const s = t.includes('T') ? t : t.replace(' ', 'T');
+    const d = new Date(s.endsWith('Z') ? s : s + 'Z');
     if (isNaN(d)) return esc(t);
-    return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+    return d.toISOString().replace('.000Z', 'Z');
   }
 
   function timeAgo(t) {
@@ -403,7 +459,19 @@
     d.textContent = String(s ?? '');
     return d.innerHTML;
   }
-})();
+}
+
+async function refresh() {
+  const btn = document.querySelector('.refresh-btn');
+  if (btn) btn.classList.add('spinning');
+  await loadAndRender();
+  const btn2 = document.querySelector('.refresh-btn');
+  if (btn2) { btn2.classList.remove('spinning'); }
+}
+
+loadAndRender();
+setInterval(loadAndRender, REFRESH_INTERVAL);
+setInterval(tickUpdatedTime, 10_000); // tick "Updated X ago" every 10s
 </script>
 </body>
 </html>
