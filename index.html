@@ -361,7 +361,7 @@ async function loadAndRender() {
             <td>${typeBadge(r.type)}</td>
             <td>${esc(r.repo)}</td>
             <td class="mono">${refLink(r.ref, r.url)}</td>
-            <td><span class="phase-badge">${esc(r.phase || 'starting')}</span></td>
+            <td><span class="phase-badge">${esc(r.phase || 'thinking')}</span></td>
             <td class="time">${formatTime(r.started_at)}</td>
             <td class="duration">${esc(r.duration || '')}</td>
           </tr>`).join('')}</tbody></table>`

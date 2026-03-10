@@ -1,128 +1,118 @@
 {
-  "updated": "2026-03-10T10:32:23Z",
+  "updated": "2026-03-18T11:25:05Z",
   "service": {
     "timer": "active",
     "next_run": ""
   },
   "stats": {
-    "running": 1,
+    "running": 0,
     "pending": 0,
-    "completed": 10,
-    "failed": 1,
-    "tmux_sessions": 1
+    "completed": 24,
+    "failed": 2,
+    "tmux_sessions": 0
   },
-  "running": [
-    {
-      "type": "issue",
-      "repo": "tasku_backend",
-      "ref": "#18",
-      "url": "https://github.com/Dambre/tasku_backend/issues/18",
-      "phase": "design",
-      "started_at": "2026-03-10T10:28:25.369887",
-      "duration": "0h 3m"
-    }
-  ],
+  "running": [],
   "pending": [],
   "recent": [
     {
-      "type": "pr_fix",
+      "type": "issue",
       "repo": "tasku_backend",
-      "ref": "PR#15",
-      "url": "https://github.com/Dambre/tasku_backend/pull/15",
-      "pr_url": null,
+      "ref": "#35",
+      "url": "https://github.com/Dambre/tasku_backend/issues/35",
+      "pr_url": "https://github.com/Dambre/tasku_backend/pull/36",
       "status": "completed",
-      "completed_at": "2026-03-10T10:18:15.770277",
+      "completed_at": "2026-03-12T16:57:59.830778",
+      "error_message": null
+    },
+    {
+      "type": "issue",
+      "repo": "tasku_backend",
+      "ref": "#30",
+      "url": "https://github.com/Dambre/tasku_backend/issues/30",
+      "pr_url": "https://github.com/Dambre/tasku_backend/pull/34",
+      "status": "completed",
+      "completed_at": "2026-03-12T09:48:55.731378",
+      "error_message": null
+    },
+    {
+      "type": "issue",
+      "repo": "tasku_backend",
+      "ref": "#31",
+      "url": "https://github.com/Dambre/tasku_backend/issues/31",
+      "pr_url": "https://github.com/Dambre/tasku_backend/pull/33",
+      "status": "completed",
+      "completed_at": "2026-03-12T09:42:49.777620",
+      "error_message": null
+    },
+    {
+      "type": "issue",
+      "repo": "tasku_backend",
+      "ref": "#29",
+      "url": "https://github.com/Dambre/tasku_backend/issues/29",
+      "pr_url": "https://github.com/Dambre/tasku_backend/pull/32",
+      "status": "completed",
+      "completed_at": "2026-03-12T08:45:56.133944",
       "error_message": null
     },
     {
       "type": "workflow",
       "repo": "workflow",
-      "ref": "#7",
-      "url": "https://github.com/Dambre/claude-tasku-workflow/issues/7",
-      "pr_url": "https://github.com/Dambre/claude-tasku-workflow/pull/8",
-      "status": "completed",
-      "completed_at": "2026-03-10T09:47:50.143270",
-      "error_message": null
-    },
-    {
-      "type": "pr_fix",
-      "repo": "tasku_backend",
-      "ref": "PR#15",
-      "url": "https://github.com/Dambre/tasku_backend/pull/15",
-      "pr_url": null,
-      "status": "completed",
-      "completed_at": "2026-03-10T09:45:48.413112",
-      "error_message": null
-    },
-    {
-      "type": "issue",
-      "repo": "tasku-frontend",
-      "ref": "#1",
-      "url": "https://github.com/Dambre/tasku-frontend/issues/1",
-      "pr_url": "https://github.com/Dambre/tasku-frontend/pull/2",
-      "status": "completed",
-      "completed_at": "2026-03-10T08:29:47.745762",
-      "error_message": null
-    },
-    {
-      "type": "issue",
-      "repo": "tasku_backend",
-      "ref": "#4",
-      "url": "https://github.com/Dambre/tasku_backend/issues/4",
-      "pr_url": "https://github.com/Dambre/tasku_backend/pull/13",
-      "status": "completed",
-      "completed_at": "2026-03-10T08:16:36.684109",
-      "error_message": null
-    },
-    {
-      "type": "issue",
-      "repo": "tasku_backend",
-      "ref": "#8",
-      "url": "https://github.com/Dambre/tasku_backend/issues/8",
-      "pr_url": "https://github.com/Dambre/tasku_backend/pull/12",
-      "status": "completed",
-      "completed_at": "2026-03-09T17:59:58.844501",
-      "error_message": null
-    },
-    {
-      "type": "issue",
-      "repo": "tasku_backend",
-      "ref": "#7",
-      "url": "https://github.com/Dambre/tasku_backend/issues/7",
-      "pr_url": "https://github.com/Dambre/tasku_backend/pull/11",
-      "status": "completed",
-      "completed_at": "2026-03-09T17:34:20.300761",
-      "error_message": null
-    },
-    {
-      "type": "issue",
-      "repo": "tasku_backend",
       "ref": "#9",
-      "url": "https://github.com/Dambre/tasku_backend/issues/9",
-      "pr_url": "https://github.com/Dambre/tasku_backend/pull/10",
-      "status": "completed",
-      "completed_at": "2026-03-09T17:33:20.092401",
-      "error_message": null
-    },
-    {
-      "type": "workflow",
-      "repo": "workflow",
-      "ref": "#3",
-      "url": "https://github.com/Dambre/claude-tasku-workflow/issues/3",
-      "pr_url": "https://github.com/Dambre/claude-tasku-workflow/pull/5",
-      "status": "completed",
-      "completed_at": "2026-03-09T13:48:46",
-      "error_message": null
-    },
-    {
-      "type": "workflow",
-      "repo": "workflow",
-      "ref": "#1",
-      "url": "https://github.com/Dambre/claude-tasku-workflow/issues/1",
+      "url": "https://github.com/Dambre/claude-tasku-workflow/issues/9",
       "pr_url": null,
       "status": "failed",
-      "completed_at": "2026-03-09T12:52:07.442871",
+      "completed_at": "2026-03-12T08:45:56.133944",
       "error_message": "session ended without PR"
+    },
+    {
+      "type": "issue",
+      "repo": "tasku_backend",
+      "ref": "#25",
+      "url": "https://github.com/Dambre/tasku_backend/issues/25",
+      "pr_url": "https://github.com/Dambre/tasku_backend/pull/28",
+      "status": "completed",
+      "completed_at": "2026-03-11T14:00:40.757119",
+      "error_message": null
+    },
+    {
+      "type": "issue",
+      "repo": "tasku_backend",
+      "ref": "#26",
+      "url": "https://github.com/Dambre/tasku_backend/issues/26",
+      "pr_url": "https://github.com/Dambre/tasku_backend/pull/27",
+      "status": "completed",
+      "completed_at": "2026-03-11T13:44:26.764297",
+      "error_message": null
+    },
+    {
+      "type": "issue",
+      "repo": "tasku_backend",
+      "ref": "#23",
+      "url": "https://github.com/Dambre/tasku_backend/issues/23",
+      "pr_url": "https://github.com/Dambre/tasku_backend/pull/24",
+      "status": "completed",
+      "completed_at": "2026-03-10T15:06:01.813763",
+      "error_message": null
+    },
+    {
+      "type": "pr_fix",
+      "repo": "tasku_backend",
+      "ref": "PR#14",
+      "url": "https://github.com/Dambre/tasku_backend/pull/14",
+      "pr_url": null,
+      "status": "completed",
+      "completed_at": "2026-03-10T14:35:35.540969",
+      "error_message": null
+    },
+    {
+      "type": "pr_fix",
+      "repo": "tasku_backend",
+      "ref": "PR#22",
+      "url": "https://github.com/Dambre/tasku_backend/pull/22",
+      "pr_url": null,
+      "status": "completed",
+      "completed_at": "2026-03-10T14:01:07.774887",
+      "error_message": null
     }
   ],
   "events": [
@@ -130,61 +120,61 @@
       "run_type": "system",
       "event": "sync_ok",
       "message": "tasku-frontend",
-      "created_at": "2026-03-10T10:32:20"
+      "created_at": "2026-03-18T11:25:01"
     },
     {
       "run_type": "system",
-      "event": "sync_ok",
-      "message": "tasku_backend",
-      "created_at": "2026-03-10T10:32:18"
+      "event": "sync_error",
+      "message": "tasku_backend: merge failed",
+      "created_at": "2026-03-18T11:24:59"
     },
     {
       "run_type": "system",
-      "event": "sync_ok",
-      "message": "tasku workflow repo",
-      "created_at": "2026-03-10T10:32:16"
+      "event": "sync_error",
+      "message": "tasku workflow repo: From github.com:Dambre/claude-tasku-workflow",
+      "created_at": "2026-03-18T11:24:56"
     },
     {
       "run_type": "system",
       "event": "cycle_start",
       "message": "",
-      "created_at": "2026-03-10T10:32:15"
+      "created_at": "2026-03-18T11:24:55"
     },
     {
       "run_type": "system",
       "event": "cycle_end",
       "message": "",
-      "created_at": "2026-03-10T10:31:24"
+      "created_at": "2026-03-18T11:24:05"
     },
     {
       "run_type": "system",
       "event": "sync_ok",
       "message": "tasku-frontend",
-      "created_at": "2026-03-10T10:31:20"
+      "created_at": "2026-03-18T11:23:59"
     },
     {
       "run_type": "system",
-      "event": "sync_ok",
-      "message": "tasku_backend",
-      "created_at": "2026-03-10T10:31:18"
+      "event": "sync_error",
+      "message": "tasku_backend: merge failed",
+      "created_at": "2026-03-18T11:23:57"
     },
     {
       "run_type": "system",
-      "event": "sync_ok",
-      "message": "tasku workflow repo",
-      "created_at": "2026-03-10T10:31:15"
+      "event": "sync_error",
+      "message": "tasku workflow repo: From github.com:Dambre/claude-tasku-workflow",
+      "created_at": "2026-03-18T11:23:55"
     },
     {
       "run_type": "system",
       "event": "cycle_start",
       "message": "",
-      "created_at": "2026-03-10T10:31:14"
+      "created_at": "2026-03-18T11:23:53"
     },
     {
       "run_type": "system",
       "event": "cycle_end",
       "message": "",
-      "created_at": "2026-03-10T10:30:24"
+      "created_at": "2026-03-18T11:23:05"
     }
   ]
 }
